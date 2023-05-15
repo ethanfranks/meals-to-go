@@ -1,54 +1,49 @@
 import React, { useState } from "react";
-import {
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Platform, StatusBar } from "react-native";
 import { Searchbar } from "react-native-paper";
-import { RestaurantInfo } from "../components/restaurant-info.component";
+import styled from "styled-components/native";
 import { colors } from "../../../utils/colors";
+import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 
 const isAndroid = Platform.OS === "android";
+
+const SafeArea = styled.SafeAreaView`
+  flex: 1;
+  ${isAndroid && `margin-top: ${StatusBar.currentHeight}px;`}
+`;
+
+const SearchContainer = styled.View`
+  padding: 16px;
+  justify-content: center;
+`;
+
+const RestaurantScreenSearchbar = styled(Searchbar)`
+  border-radius: 5px;
+  background-color: ${colors.white};
+`;
+
+const RestaurantListContainer = styled.View`
+  flex: 1;
+  padding: 16px;
+  background-color: blue;
+`;
 
 export const RestaurantsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Searchbar
+    <SafeArea>
+      <SearchContainer>
+        <RestaurantScreenSearchbar
           placeholder="Search"
           value={searchQuery}
           onChangeText={setSearchQuery}
           elevation={4}
-          style={styles.searchbar}
         />
-      </View>
-      <View style={styles.listContainer}>
-        <RestaurantInfo />
-      </View>
-    </SafeAreaView>
+      </SearchContainer>
+      <RestaurantListContainer>
+        <RestaurantInfoCard />
+      </RestaurantListContainer>
+    </SafeArea>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: isAndroid ? StatusBar.currentHeight : 0,
-  },
-  searchContainer: {
-    padding: 16,
-    justifyContent: "center",
-  },
-  searchbar: {
-    borderRadius: 5,
-    backgroundColor: colors.white,
-  },
-  listContainer: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "blue",
-  },
-});
